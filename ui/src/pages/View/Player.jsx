@@ -405,6 +405,16 @@ export default ({ match }) => {
 								{(permissionLevel >= 90) && <button className={classes.actionBtn} onClick={() => onAction('marker')} disabled={(user?.Source === player.Source)}>
 									GPS Marker
 								</button>}
+								{(permissionLevel >= 90) && player.Character && (
+									<button
+										className={classes.actionBtn}
+										onClick={() => history.push(`/items-database?sid=${player.Character.SID}&name=${encodeURIComponent(`${player.Character.First} ${player.Character.Last}`)}`)}
+										disabled={player.Disconnected}
+									>
+										<FontAwesomeIcon icon={['fas', 'box-open']} style={{ marginRight: 4 }} />
+										Give Items
+									</button>
+								)}
 							</div>
 						</Grid>
 						{player.Disconnected &&	<Grid item xs={12}>
