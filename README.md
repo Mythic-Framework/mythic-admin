@@ -27,6 +27,10 @@ A full-featured in-game admin panel that gives staff the tools to manage players
 
 ---
 
+> **New Addition:** The admin panel now includes a **Door Lock Tool** and **Elevator Tool** for creating, editing, and deleting doors and elevators at runtime. These tools require `mythic-doors` to be running with database support. Run `/migratedoors` and `/migrateelevators` in-game before using these pages. See the [mythic-doors README](https://github.com/Mythic-Framework/mythic-doors/blob/main/README.md) for details.
+
+---
+
 ## ✨ Features
 
 <div align="center">
@@ -50,6 +54,8 @@ A full-featured in-game admin panel that gives staff the tools to manage players
 - **Items Database** — Browse, search, and filter all server items with give-to-player functionality
 - **Vehicle Inspector** — View current vehicle info, repair, fuel, explode, and more
 - **Disconnected Players** — Track recently disconnected players and reconnection status
+- **Door Lock Tool** — Create, edit, delete, and toggle doors with restrictions, lockpick settings, and in-game capture
+- **Elevator Tool** — Create and manage multi-floor elevators with zone and position capture
 - **Noclip** — Freecam with dev mode and info overlays
 - **Staff Camera** — Dedicated observation camera
 
@@ -93,6 +99,7 @@ bun run build    # production build
 | `mythic-base` | Core framework (components, callbacks, fetch) |
 | `mythic-pwnzor` | Anti-cheat |
 | `mythic-inventory` | Items database exports |
+| `mythic-doors` | Door lock and elevator management exports |
 
 ---
 

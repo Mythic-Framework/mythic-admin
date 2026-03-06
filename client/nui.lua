@@ -222,6 +222,90 @@ RegisterNUICallback('GiveItem', function(data, cb)
     Callbacks:ServerCallback('Admin:GiveItem', data, cb)
 end)
 
+-- Door Lock Tool
+RegisterNUICallback('GetDoorList', function(data, cb)
+    Callbacks:ServerCallback('Admin:GetDoorList', data, cb)
+end)
+
+RegisterNUICallback('CreateDoor', function(data, cb)
+    Callbacks:ServerCallback('Admin:CreateDoor', data, cb)
+end)
+
+RegisterNUICallback('UpdateDoor', function(data, cb)
+    Callbacks:ServerCallback('Admin:UpdateDoor', data, cb)
+end)
+
+RegisterNUICallback('DeleteDoor', function(data, cb)
+    Callbacks:ServerCallback('Admin:DeleteDoor', data, cb)
+end)
+
+RegisterNUICallback('ToggleDoorLock', function(data, cb)
+    Callbacks:ServerCallback('Admin:ToggleDoorLock', data, cb)
+end)
+
+RegisterNUICallback('StartDoorHelper', function(data, cb)
+    cb('OK')
+    CloseMenu()
+    Callbacks:ServerCallback('Admin:StartDoorHelper', {}, function() end)
+end)
+
+RegisterNUICallback('TeleportToCoords', function(data, cb)
+    Callbacks:ServerCallback('Admin:TeleportToCoords', data, cb)
+end)
+
+RegisterNetEvent('Admin:Client:DoorCaptured', function(data)
+    SendNUIMessage({
+        type = "DOOR_CAPTURED",
+        data = data,
+    })
+    OpenMenu()
+end)
+
+-- Elevator Tool
+RegisterNUICallback('GetElevatorList', function(data, cb)
+    Callbacks:ServerCallback('Admin:GetElevatorList', data, cb)
+end)
+
+RegisterNUICallback('CreateElevator', function(data, cb)
+    Callbacks:ServerCallback('Admin:CreateElevator', data, cb)
+end)
+
+RegisterNUICallback('UpdateElevator', function(data, cb)
+    Callbacks:ServerCallback('Admin:UpdateElevator', data, cb)
+end)
+
+RegisterNUICallback('DeleteElevator', function(data, cb)
+    Callbacks:ServerCallback('Admin:DeleteElevator', data, cb)
+end)
+
+RegisterNUICallback('StartElevatorZoneHelper', function(data, cb)
+    cb('OK')
+    CloseMenu()
+    Callbacks:ServerCallback('Admin:StartElevatorZoneHelper', {}, function() end)
+end)
+
+RegisterNUICallback('StartElevatorPositionHelper', function(data, cb)
+    cb('OK')
+    CloseMenu()
+    Callbacks:ServerCallback('Admin:StartElevatorPositionHelper', {}, function() end)
+end)
+
+RegisterNetEvent('Admin:Client:ElevatorZoneCaptured', function(data)
+    SendNUIMessage({
+        type = "ELEVATOR_ZONE_CAPTURED",
+        data = data,
+    })
+    OpenMenu()
+end)
+
+RegisterNetEvent('Admin:Client:ElevatorPositionCaptured', function(data)
+    SendNUIMessage({
+        type = "ELEVATOR_POSITION_CAPTURED",
+        data = data,
+    })
+    OpenMenu()
+end)
+
 function CopyClipboard(txt)
     SendNUIMessage({
         type = "COPY",
