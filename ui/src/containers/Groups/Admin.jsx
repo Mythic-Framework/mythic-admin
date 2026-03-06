@@ -17,6 +17,7 @@ import {
 	SearchItems,
 	DoorLockTool,
 	ElevatorTool,
+	PedManagement,
 } from '../../pages';
 
 import Titlebar from '../../components/Titlebar';
@@ -71,6 +72,7 @@ export default () => {
 							<Route exact path="/items-database" component={SearchItems} />
 							<Route exact path="/door-lock-tool" component={DoorLockTool} />
 							<Route exact path="/elevator-tool" component={ElevatorTool} />
+							<Route exact path="/ped-management" component={PedManagement} />
 							<Route exact path="/player/:id" component={PlayerView} />
                             <Route component={Error} />
                         </Switch>

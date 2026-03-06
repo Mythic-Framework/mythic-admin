@@ -10,111 +10,46 @@ import { toast } from 'react-toastify';
 
 import Nui from '../../util/Nui';
 import { Loader } from '../../components';
+import * as T from '../../styles/theme';
 
 const PAGE_SIZE = 50;
 
 const useStyles = makeStyles((theme) => ({
-    wrapper: {
-        padding: '20px 10px 20px 20px',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        fontFamily: "'Rajdhani', sans-serif",
-    },
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 12,
-        flexShrink: 0,
-    },
-    headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
-    title: { fontSize: 18, fontWeight: 600, color: '#fff', fontFamily: "'Orbitron', sans-serif" },
-    subtitle: { fontSize: 12, color: 'rgba(255, 255, 255, 0.35)', fontFamily: "'Rajdhani', sans-serif" },
-    headerActions: { display: 'flex', gap: 8, alignItems: 'center' },
-    statsRow: { display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap', flexShrink: 0 },
-    filterRow: { display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center', flexShrink: 0 },
-    searchField: {
-        flex: 1, maxWidth: 300,
-        '& .MuiOutlinedInput-root': {
-            fontFamily: "'Rajdhani', sans-serif", background: 'rgba(255, 255, 255, 0.04)', borderRadius: 6, fontSize: 13, color: '#fff',
-            '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.08)' },
-            '&:hover fieldset': { borderColor: 'rgba(32, 134, 146, 0.3)' },
-            '&.Mui-focused fieldset': { borderColor: 'rgba(32, 134, 146, 0.6)' },
-        },
-        '& .MuiInputAdornment-root': { color: 'rgba(255, 255, 255, 0.3)' },
-    },
-    tableContainer: {
-        flex: 1, overflowY: 'auto', overflowX: 'hidden', minHeight: 0,
-        background: 'rgba(255, 255, 255, 0.02)', borderRadius: 8,
-        border: '1px solid rgba(255, 255, 255, 0.06)',
-    },
-    // Dialog styles (kept MUI for dialog only)
+    wrapper: T.wrapper,
+    header: T.header,
+    headerLeft: T.headerLeft,
+    title: T.title,
+    subtitle: T.subtitle,
+    headerActions: T.headerActions,
+    statsRow: T.statsRow,
+    filterRow: T.filterRow,
+    searchField: T.searchFieldSx,
+    tableContainer: T.tableContainer,
     dialog: {
         '& .MuiDialog-paper': {
-            background: '#121025', border: '1px solid rgba(32, 134, 146, 0.2)',
-            borderRadius: 12, color: '#fff', minWidth: 500, maxWidth: 600, maxHeight: '80vh',
+            background: T.bgMain, border: `1px solid ${T.borderTeal}`,
+            borderRadius: 12, color: T.textPrimary, minWidth: 500, maxWidth: 600, maxHeight: '80vh',
         },
     },
-    dialogTitle: { background: 'rgba(0, 0, 0, 0.3)', borderBottom: '1px solid rgba(255, 255, 255, 0.06)', padding: '12px 20px', fontSize: 15, fontWeight: 600, fontFamily: "'Orbitron', sans-serif" },
-    dialogContent: { padding: '16px 20px', overflowY: 'auto' },
-    dialogActions: { padding: '12px 20px', borderTop: '1px solid rgba(255, 255, 255, 0.06)', gap: 8 },
-    formField: {
-        marginBottom: 12,
-        '& .MuiOutlinedInput-root': {
-            fontFamily: "'Rajdhani', sans-serif", background: 'rgba(255, 255, 255, 0.04)', borderRadius: 6, fontSize: 13, color: '#fff',
-            '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.08)' },
-            '&:hover fieldset': { borderColor: 'rgba(32, 134, 146, 0.3)' },
-            '&.Mui-focused fieldset': { borderColor: 'rgba(32, 134, 146, 0.6)' },
-        },
-        '& .MuiInputLabel-root': { fontFamily: "'Rajdhani', sans-serif", color: 'rgba(255, 255, 255, 0.4)', fontSize: 13 },
-        '& .MuiInputLabel-root.Mui-focused': { color: '#4db8c4' },
-    },
-    formRow: { display: 'flex', gap: 10 },
-    sectionLabel: { fontFamily: "'Rajdhani', sans-serif", fontSize: 12, fontWeight: 600, color: 'rgba(32, 134, 146, 0.8)', textTransform: 'uppercase', letterSpacing: '0.5px', marginTop: 8, marginBottom: 8 },
-    switchLabel: {
-        '& .MuiTypography-root': { fontSize: 13, color: 'rgba(255, 255, 255, 0.7)' },
-        '& .MuiSwitch-colorSecondary.Mui-checked': { color: '#208692' },
-        '& .MuiSwitch-colorSecondary.Mui-checked + .MuiSwitch-track': { backgroundColor: '#208692' },
-    },
-    restrictionRow: { display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 8, padding: '8px 10px', background: 'rgba(255, 255, 255, 0.03)', borderRadius: 6, border: '1px solid rgba(255, 255, 255, 0.05)' },
-    restrictionFields: { flex: 1, display: 'flex', flexDirection: 'column', gap: 6 },
-    restrictionFieldRow: { display: 'flex', gap: 6 },
-    smallField: {
-        '& .MuiOutlinedInput-root': {
-            background: 'rgba(255, 255, 255, 0.04)', borderRadius: 4, fontSize: 12, color: '#fff',
-            '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.06)' },
-            '&:hover fieldset': { borderColor: 'rgba(32, 134, 146, 0.2)' },
-            '&.Mui-focused fieldset': { borderColor: 'rgba(32, 134, 146, 0.5)' },
-        },
-        '& .MuiInputLabel-root': { color: 'rgba(255, 255, 255, 0.3)', fontSize: 12 },
-        '& .MuiSelect-icon': { color: 'rgba(255, 255, 255, 0.3)' },
-    },
-    selectMenu: { '& .MuiPaper-root': { background: '#1c1a30', border: '1px solid rgba(32, 134, 146, 0.2)', color: '#fff' }, '& .MuiMenuItem-root': { fontSize: 12 } },
+    dialogTitle: T.dialogTitleDark,
+    dialogContent: T.dialogContent,
+    dialogActions: T.dialogActions,
+    formField: T.formFieldSx,
+    formRow: T.formRow,
+    sectionLabel: T.sectionLabel,
+    switchLabel: T.switchLabel,
+    restrictionRow: T.restrictionRow,
+    restrictionFields: T.restrictionFields,
+    restrictionFieldRow: T.restrictionFieldRow,
+    smallField: T.smallFieldSx,
+    selectMenu: T.selectMenu,
 }));
 
 const EMPTY_DOOR = { id: '', model: '', coords: { x: '', y: '', z: '' }, locked: false, maxDist: 2.0, canLockpick: false, holdOpen: false, autoRate: 0, autoDist: '', autoLock: 0, double: '', special: false, restricted: [] };
 const EMPTY_RESTRICTION = { type: 'job', job: '', workplace: '', grade: '', gradeLevel: '', reqDuty: false, SID: '', key: '', value: '' };
 const FILTERS = ['All', 'Locked', 'Unlocked'];
 
-// Plain CSS for table (avoids MUI overhead per row)
-const tableStyles = {
-    table: { width: '100%', borderCollapse: 'collapse', fontSize: 12, fontFamily: "'Rajdhani', sans-serif" },
-    th: { background: '#0a0914', color: 'rgba(32, 134, 146, 0.8)', fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.5px', padding: '8px 12px', textAlign: 'left', position: 'sticky', top: 0, zIndex: 1, borderBottom: '1px solid rgba(255, 255, 255, 0.06)' },
-    td: { padding: '6px 12px', borderBottom: '1px solid rgba(255, 255, 255, 0.04)', color: 'rgba(255, 255, 255, 0.7)', fontFamily: "'Rajdhani', sans-serif" },
-    mono: { fontFamily: 'monospace', fontSize: 11 },
-    coords: { fontFamily: 'monospace', fontSize: 11, color: 'rgba(255, 255, 255, 0.5)' },
-    dot: (locked) => ({ width: 8, height: 8, borderRadius: '50%', display: 'inline-block', background: locked ? '#2ecc71' : '#e74c3c', boxShadow: locked ? '0 0 6px rgba(46, 204, 113, 0.5)' : '0 0 6px rgba(231, 76, 60, 0.5)' }),
-    btn: { background: 'none', border: 'none', padding: '4px 6px', cursor: 'pointer', color: 'rgba(32, 134, 146, 0.7)', fontSize: 12 },
-    btnDanger: { background: 'none', border: 'none', padding: '4px 6px', cursor: 'pointer', color: 'rgba(231, 76, 60, 0.6)', fontSize: 12 },
-    badge: { display: 'inline-block', padding: '1px 8px', borderRadius: 10, fontSize: 10, fontFamily: "'Rajdhani', sans-serif", background: 'rgba(32, 134, 146, 0.15)', color: '#4db8c4' },
-    chip: (active) => ({ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', padding: '4px 12px', borderRadius: 13, fontSize: 11, fontFamily: "'Rajdhani', sans-serif", border: active ? '1px solid rgba(32, 134, 146, 0.5)' : '1px solid rgba(255, 255, 255, 0.08)', background: active ? 'rgba(32, 134, 146, 0.2)' : 'rgba(255, 255, 255, 0.04)', color: active ? '#4db8c4' : 'rgba(255, 255, 255, 0.5)', userSelect: 'none' }),
-    stat: (borderColor) => ({ display: 'inline-flex', alignItems: 'center', padding: '4px 10px', borderRadius: 13, fontSize: 11, fontFamily: "'Rajdhani', sans-serif", background: 'rgba(255, 255, 255, 0.06)', border: `1px solid ${borderColor || 'rgba(255, 255, 255, 0.08)'}`, color: 'rgba(255, 255, 255, 0.7)' }),
-    headerBtn: (bg, border, color) => ({ background: bg, border: `1px solid ${border}`, color, fontSize: 12, fontFamily: "'Rajdhani', sans-serif", fontWeight: 600, letterSpacing: '0.05em', padding: '4px 12px', borderRadius: 6, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }),
-    iconBtn: { background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'rgba(32, 134, 146, 0.7)', fontSize: 14 },
-    pager: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, padding: '8px 0', flexShrink: 0, color: 'rgba(255, 255, 255, 0.5)', fontSize: 12, fontFamily: "'Rajdhani', sans-serif" },
-    pageBtn: (disabled) => ({ background: disabled ? 'rgba(255,255,255,0.02)' : 'rgba(32, 134, 146, 0.15)', border: '1px solid rgba(32, 134, 146, 0.2)', color: disabled ? 'rgba(255,255,255,0.2)' : '#4db8c4', borderRadius: 6, padding: '4px 10px', cursor: disabled ? 'default' : 'pointer', fontSize: 11, fontFamily: "'Rajdhani', sans-serif", fontWeight: 600 }),
-};
+const tableStyles = T.tableStyles;
 
 // Lightweight restriction tooltip text
 const restrictionText = (r) => {

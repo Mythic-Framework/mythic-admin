@@ -10,26 +10,7 @@ import { toast } from 'react-toastify';
 
 import { Modal } from '../../components';
 import Nui from '../../util/Nui';
-
-const inputSx = {
-	'& .MuiOutlinedInput-root': {
-		fontFamily: "'Rajdhani', sans-serif",
-		fontSize: 14,
-		color: '#fff',
-		background: 'rgba(255,255,255,0.03)',
-		borderRadius: '2px',
-		'& fieldset': { borderColor: 'rgba(32,134,146,0.2)' },
-		'&:hover fieldset': { borderColor: 'rgba(32,134,146,0.5)' },
-		'&.Mui-focused fieldset': { borderColor: '#208692', borderWidth: '1px' },
-	},
-	'& .MuiInputLabel-root': {
-		fontFamily: "'Rajdhani', sans-serif",
-		fontSize: 13,
-		fontWeight: 600,
-		color: 'rgba(255,255,255,0.35)',
-		'&.Mui-focused': { color: '#208692' },
-	},
-};
+import { inputSx } from '../../styles/theme';
 
 const useStyles = makeStyles((theme) => ({
 	imageContainer: {
