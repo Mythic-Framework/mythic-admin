@@ -385,26 +385,35 @@ function RegisterCallbacks()
                 return
             end
 
+            local targetChar = target:GetData('Character')
+            if not targetChar then
+                cb({ success = false, message = 'Target has no active character' })
+                return
+            end
+
+            local charSID = targetChar:GetData('SID')
             local itemName = data.itemName
             local quantity = tonumber(data.quantity) or 1
             local isWeapon = data.isWeapon
+            local targetName = targetChar:GetData('First') .. ' ' .. targetChar:GetData('Last')
 
             if isWeapon then
                 local ammo = tonumber(data.ammo) or 0
-                Inventory:AddItem(targetSID, itemName, 1, { ammo = ammo, clip = 0 }, 1)
+                Inventory:AddItem(charSID, itemName, 1, { ammo = ammo, clip = 0 }, 1)
             else
-                Inventory:AddItem(targetSID, itemName, quantity, {}, 1)
+                Inventory:AddItem(charSID, itemName, quantity, {}, 1)
             end
 
             Logger:Warn(
                 "Admin",
                 string.format(
-                    "%s [%s] Gave Item %s (x%s) To SID %s Via Admin Panel",
+                    "%s [%s] Gave Item %s (x%s) To %s (SID %s) Via Admin Panel",
                     player:GetData("Name"),
                     player:GetData("AccountID"),
                     itemName,
                     quantity,
-                    targetSID
+                    targetName,
+                    charSID
                 ),
                 {
                     console = true,
@@ -418,7 +427,7 @@ function RegisterCallbacks()
                 }
             )
 
-            cb({ success = true, message = string.format('Gave %sx %s to SID %s', quantity, itemName, targetSID) })
+            cb({ success = true, message = string.format('Gave %sx %s to %s (SID %s)', quantity, itemName, targetName, charSID) })
         else
             cb(false)
         end
