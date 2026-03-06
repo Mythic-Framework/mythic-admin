@@ -9,6 +9,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLocation } from 'react-router-dom';
 
 import Nui from '../../util/Nui';
 import { Loader } from '../../components';
@@ -79,6 +80,41 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		flexDirection: 'column',
 	},
+	targetBanner: {
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		padding: '8px 12px',
+		marginBottom: 12,
+		background: 'rgba(32,134,146,0.08)',
+		border: '1px solid rgba(32,134,146,0.2)',
+		borderRadius: 2,
+	},
+	targetText: {
+		fontFamily: "'Rajdhani', sans-serif",
+		fontSize: 12,
+		fontWeight: 600,
+		color: '#208692',
+		letterSpacing: '0.05em',
+	},
+	clearTargetBtn: {
+		background: 'none',
+		border: '1px solid rgba(32,134,146,0.3)',
+		borderRadius: 2,
+		color: 'rgba(32,134,146,0.7)',
+		fontSize: 10,
+		fontWeight: 700,
+		fontFamily: "'Rajdhani', sans-serif",
+		letterSpacing: '0.1em',
+		textTransform: 'uppercase',
+		padding: '3px 10px',
+		cursor: 'pointer',
+		transition: 'all 0.2s ease',
+		'&:hover': {
+			borderColor: '#208692',
+			color: '#208692',
+		},
+	},
 	search: {
 		marginBottom: 12,
 		flexShrink: 0,
@@ -124,6 +160,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default () => {
 	const classes = useStyles();
+	const location = useLocation();
 
 	const [searched, setSearched] = useState('');
 	const [typeFilter, setTypeFilter] = useState(0);
@@ -135,6 +172,10 @@ export default () => {
 
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [modalOpen, setModalOpen] = useState(false);
+
+	const params = new URLSearchParams(location.search);
+	const [targetSid, setTargetSid] = useState(params.get('sid') || '');
+	const [targetName, setTargetName] = useState(params.get('name') || '');
 
 	useEffect(() => {
 		fetchItems();
@@ -184,6 +225,17 @@ export default () => {
 
 	return (
 		<div className={classes.wrapper}>
+			{targetSid && (
+				<div className={classes.targetBanner}>
+					<span className={classes.targetText}>
+						<FontAwesomeIcon icon={['fas', 'crosshairs']} style={{ marginRight: 6 }} />
+						Giving items to: {targetName || `SID ${targetSid}`}
+					</span>
+					<button className={classes.clearTargetBtn} onClick={() => { setTargetSid(''); setTargetName(''); }}>
+						Clear Target
+					</button>
+				</div>
+			)}
 			<div className={classes.search}>
 				<Grid container spacing={1}>
 					<Grid item xs={3}>
@@ -274,6 +326,8 @@ export default () => {
 				open={modalOpen}
 				item={selectedItem}
 				onClose={onCloseModal}
+				targetSid={targetSid}
+				targetName={targetName}
 			/>
 		</div>
 	);
