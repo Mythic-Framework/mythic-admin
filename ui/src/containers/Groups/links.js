@@ -69,6 +69,13 @@ const admin = [
 		label: 'Current Vehicle',
 		path: '/current-vehicle',
 		exact:  true,
+	},
+	{
+		name: 'items-database',
+		icon: ['fas', 'box-open'],
+		label: 'Items Database',
+		path: '/items-database',
+		exact: true,
 	}
 ];
 
@@ -100,5 +107,12 @@ const developer = [
 		label: 'Current Vehicle',
 		path: '/current-vehicle',
 		exact:  true,
+	},
+	{
+		name: 'items-database',
+		icon: ['fas', 'box-open'],
+		label: 'Items Database',
+		path: '/items-database',
+		exact: true,
 	}
 ];

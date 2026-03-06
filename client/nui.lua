@@ -214,6 +214,14 @@ RegisterNUICallback('ToggleIDs', function(data, cb)
     end
 end)
 
+RegisterNUICallback('GetItemList', function(data, cb)
+    Callbacks:ServerCallback('Admin:GetItemList', data, cb)
+end)
+
+RegisterNUICallback('GiveItem', function(data, cb)
+    Callbacks:ServerCallback('Admin:GiveItem', data, cb)
+end)
+
 function CopyClipboard(txt)
     SendNUIMessage({
         type = "COPY",

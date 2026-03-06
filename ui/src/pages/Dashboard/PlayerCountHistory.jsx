@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { useTheme } from "@material-ui/core/styles";
 import moment from "moment";
 
 import {
@@ -20,63 +18,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const data = [
-  {
-    name: "Page A",
-    count: 10,
-  },
-  {
-    name: "Page B",
-    count: 10,
-  },
-  {
-    name: "Page C",
-    count: 32,
-  },
-  {
-    name: "Page D",
-    count: 64,
-  },
-  {
-    name: "Page E",
-    count: 128,
-  },
-  {
-    name: "Page F",
-    count: 10,
-  },
-  {
-    name: "Page F",
-    count: 10,
-  },
-  {
-    name: "Page F",
-    count: 10,
-  },
-  {
-    name: "Page F",
-    count: 20,
-  },
-];
-
 export default ({ current, history }) => {
   const classes = useStyles();
-  const theme = useTheme();
   const [pHistory, setPHistory] = useState({});
 
   useEffect(() => {
     const now = moment().unix();
-    let cunts = history.map((h) => {
+    let entries = history.map((h) => {
       return { ...h, name: moment.unix(h.time).format("HH:mm") };
     });
 
-    cunts.push({
+    entries.push({
       time: now,
       count: current,
       name: "Now",
     });
 
-    setPHistory(cunts);
+    setPHistory(entries);
   }, [history, current]);
 
   return (
@@ -92,13 +50,40 @@ export default ({ current, history }) => {
           bottom: 0,
         }}
       >
-        <XAxis dataKey="name" />
-        <YAxis allowDecimals={false} />
+        <defs>
+          <linearGradient id="tealGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#208692" stopOpacity={0.3} />
+            <stop offset="95%" stopColor="#208692" stopOpacity={0.02} />
+          </linearGradient>
+        </defs>
+        <XAxis
+          dataKey="name"
+          tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 11, fontFamily: "'Rajdhani', sans-serif" }}
+          axisLine={{ stroke: 'rgba(32,134,146,0.15)' }}
+          tickLine={{ stroke: 'rgba(32,134,146,0.15)' }}
+        />
+        <YAxis
+          allowDecimals={false}
+          tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 11, fontFamily: "'Rajdhani', sans-serif" }}
+          axisLine={{ stroke: 'rgba(32,134,146,0.15)' }}
+          tickLine={{ stroke: 'rgba(32,134,146,0.15)' }}
+        />
+        <Tooltip
+          contentStyle={{
+            background: 'rgba(18,16,37,0.96)',
+            border: '1px solid rgba(32,134,146,0.3)',
+            borderRadius: 2,
+            fontFamily: "'Rajdhani', sans-serif",
+            fontSize: 13,
+            color: '#fff',
+          }}
+        />
         <Area
           type="monotone"
           dataKey="count"
-          stroke={theme.palette.primary.main}
-          fill={theme.palette.primary.light}
+          stroke="#208692"
+          strokeWidth={2}
+          fill="url(#tealGradient)"
         />
       </AreaChart>
     </ResponsiveContainer>
