@@ -90,6 +90,13 @@ const admin = [
 		label: 'Elevator Tool',
 		path: '/elevator-tool',
 		exact: true,
+	},
+	{
+		name: 'ped-management',
+		icon: ['fas', 'person'],
+		label: 'Ped Management',
+		path: '/ped-management',
+		exact: true,
 	}
 ];
 
@@ -141,6 +148,13 @@ const developer = [
 		icon: ['fas', 'elevator'],
 		label: 'Elevator Tool',
 		path: '/elevator-tool',
+		exact: true,
+	},
+	{
+		name: 'ped-management',
+		icon: ['fas', 'person'],
+		label: 'Ped Management',
+		path: '/ped-management',
 		exact: true,
 	}
 ];

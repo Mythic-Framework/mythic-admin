@@ -13,6 +13,7 @@ import SearchItems from './SearchItems';
 
 import DoorLockTool from './DoorLockTool';
 import ElevatorTool from './ElevatorTool';
+import PedManagement from './PedManagement';
 
 export {
     Dashboard,
@@ -23,5 +24,6 @@ export {
     SearchItems,
     DoorLockTool,
     ElevatorTool,
+    PedManagement,
     Error,
 };
