@@ -26,20 +26,20 @@ export default () => {
 
   const muiTheme = createTheme({
     typography: {
-      fontFamily: ["Exo"],
+      fontFamily: ["Oswald"],
       fontWeightRegular: 400,
     },
     palette: {
       primary: {
-        main: "#7BDCFFFF",
-        light: "#9CEDFFFF",
-        dark: "#0098CAFF",
+        main: "#208692",
+        light: "#4db8c4",
+        dark: "#0e5a62",
         contrastText: "#ffffff",
       },
       secondary: {
-        main: "#141414",
-        light: "#1c1c1c",
-        dark: "#0f0f0f",
+        main: "#121025",
+        light: "#1c1a30",
+        dark: "#0a0914",
         contrastText: "#ffffff",
       },
       error: {
@@ -63,9 +63,9 @@ export default () => {
         dark: "#175878",
       },
       text: {
-        main: theme === "dark" ? "#ffffff" : "#2e2e2e",
-        alt: theme === "dark" ? "rgba(255, 255, 255, 0.7)" : "#858585",
-        info: theme === "dark" ? "#919191" : "#919191",
+        main: "#ffffff",
+        alt: "rgba(255, 255, 255, 0.6)",
+        info: "#919191",
         light: "#ffffff",
         dark: "#000000",
       },
@@ -74,42 +74,87 @@ export default () => {
         greenDark: "#064224",
       },
       border: {
-        main: theme === "dark" ? "#e0e0e008" : "#e0e0e008",
+        main: "rgba(32,134,146,0.08)",
         light: "#ffffff",
         dark: "#26292d",
-        input:
-          theme === "dark"
-            ? "rgba(255, 255, 255, 0.23)"
-            : "rgba(0, 0, 0, 0.23)",
-        divider:
-          theme === "dark"
-            ? "rgba(255, 255, 255, 0.12)"
-            : "rgba(0, 0, 0, 0.12)",
+        input: "rgba(255, 255, 255, 0.23)",
+        divider: "rgba(32,134,146,0.15)",
       },
-      mode: theme,
+      mode: "dark",
     },
     components: {
       MuiTooltip: {
         styleOverrides: {
           tooltip: {
-            fontSize: 16,
-            backgroundColor: "#151515",
-            border: "1px solid rgba(255, 255, 255, 0.23)",
-            boxShadow: `0 0 10px #000`,
+            fontSize: 14,
+            fontFamily: "'Rajdhani', sans-serif",
+            backgroundColor: "#121025",
+            border: "1px solid rgba(32,134,146,0.3)",
+            boxShadow: "0 0 20px rgba(0,0,0,0.6)",
+            borderRadius: 2,
           },
         },
       },
       MuiPaper: {
         styleOverrides: {
           root: {
-            background: "#151515",
+            background: "#0e0c1e",
+          },
+        },
+      },
+      MuiMenu: {
+        styleOverrides: {
+          paper: {
+            background: "#121025 !important",
+            border: "1px solid rgba(32,134,146,0.25)",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.6), 0 0 0 1px rgba(32,134,146,0.06)",
+            borderRadius: "2px !important",
+            marginTop: 4,
+          },
+          list: {
+            padding: "4px 0",
+          },
+        },
+      },
+      MuiMenuItem: {
+        styleOverrides: {
+          root: {
+            fontFamily: "'Rajdhani', sans-serif",
+            fontSize: 13,
+            fontWeight: 600,
+            letterSpacing: "0.06em",
+            color: "rgba(255,255,255,0.7)",
+            padding: "8px 16px",
+            transition: "all 0.15s ease",
+            "&:hover": {
+              background: "rgba(32,134,146,0.1)",
+              color: "#ffffff",
+            },
+            "&.Mui-selected": {
+              background: "rgba(32,134,146,0.15)",
+              color: "#208692",
+              "&:hover": {
+                background: "rgba(32,134,146,0.22)",
+              },
+            },
           },
         },
       },
       MuiAutocomplete: {
         styleOverrides: {
           paper: {
-            boxShadow: "0 0 25px #000",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.6)",
+            background: "#121025",
+            border: "1px solid rgba(32,134,146,0.25)",
+            borderRadius: 2,
+          },
+        },
+      },
+      MuiSelect: {
+        styleOverrides: {
+          icon: {
+            color: "rgba(32,134,146,0.5)",
+            transition: "color 0.2s ease",
           },
         },
       },
@@ -129,36 +174,40 @@ export default () => {
             right: "0.5em !important",
             position: "absolute !important",
           },
+          ".Toastify__toast": {
+            fontFamily: "'Rajdhani', sans-serif",
+            background: "rgba(18,16,37,0.96)",
+            border: "1px solid rgba(32,134,146,0.2)",
+            borderRadius: "2px",
+          },
           ".tox-dialog-wrap__backdrop": {
             height: "90% !important",
             width: "90% !important",
             margin: "auto !important",
-            background: "#151515bf !important",
+            background: "#121025bf !important",
           },
           ".tox-statusbar__branding": {
             display: "none !important",
           },
-          "*": ({ theme }) => ({
+          "*": {
             "&::-webkit-scrollbar": {
-              width: 6,
+              width: 4,
             },
             "&::-webkit-scrollbar-thumb": {
-              background: theme.palette.primary.main,
-              borderRadius: 3,
-              opacity: 0.45,
+              background: "rgba(32,134,146,0.3)",
+              borderRadius: 2,
               transition: "background ease-in 0.15s",
             },
             "&::-webkit-scrollbar-thumb:hover": {
-              background: theme.palette.primary.main,
-              opacity: 0.6,
+              background: "#208692",
             },
             "&::-webkit-scrollbar-track": {
               background: "transparent",
             },
-          }),
+          },
           html: {
             background:
-              process.env.NODE_ENV != "production" ? "#1e1e1e" : "transparent",
+              process.env.NODE_ENV != "production" ? "#121025" : "transparent",
             "input::-webkit-outer-spin-button, input::-webkit-inner-spin-button":
               {
                 WebkitAppearance: "none",
@@ -168,7 +217,7 @@ export default () => {
           body: {
             position: "relative",
             zIndex: -15,
-            backgroundColor: "#0b0a0a",
+            backgroundColor: "#121025",
             position: "absolute",
             top: 0,
             bottom: 0,
@@ -177,10 +226,13 @@ export default () => {
             margin: "auto",
             height: "90%",
             width: "60%",
-            borderRadius: 10,
+            borderRadius: 2,
             overflowY: "auto",
             overflowX: "hidden",
             paddingRight: "0px !important",
+            border: "none",
+            boxShadow: "none",
+            background: "transparent",
 
             ".item-enter": {
               opacity: 0,

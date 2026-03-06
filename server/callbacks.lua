@@ -344,6 +344,86 @@ function RegisterCallbacks()
         end
     end)
 
+    Callbacks:RegisterServerCallback('Admin:GetItemList', function(source, data, cb)
+        local player = Fetch:Source(source)
+        if player and player.Permissions:IsAdmin() then
+            local items = exports['mythic-inventory']:GetItemsDatabase()
+            cb(items)
+        else
+            cb(false)
+        end
+    end)
+
+    Callbacks:RegisterServerCallback('Admin:GiveItem', function(source, data, cb)
+        local player = Fetch:Source(source)
+        if player and player.Permissions:IsAdmin() then
+            local Inventory = exports['mythic-base']:FetchComponent('Inventory')
+
+            if not exports['mythic-inventory']:DoesItemExist(data.itemName) then
+                cb({ success = false, message = 'Item Does Not Exist' })
+                return
+            end
+
+            local targetSID
+            if data.toSelf then
+                local char = player:GetData('Character')
+                if char then
+                    targetSID = char:GetData('SID')
+                end
+            else
+                targetSID = tonumber(data.sid)
+            end
+
+            if not targetSID then
+                cb({ success = false, message = 'Invalid Target' })
+                return
+            end
+
+            local target = Fetch:SID(targetSID)
+            if not target then
+                cb({ success = false, message = 'Player Not Online' })
+                return
+            end
+
+            local itemName = data.itemName
+            local quantity = tonumber(data.quantity) or 1
+            local isWeapon = data.isWeapon
+
+            if isWeapon then
+                local ammo = tonumber(data.ammo) or 0
+                Inventory:AddItem(targetSID, itemName, 1, { ammo = ammo, clip = 0 }, 1)
+            else
+                Inventory:AddItem(targetSID, itemName, quantity, {}, 1)
+            end
+
+            Logger:Warn(
+                "Admin",
+                string.format(
+                    "%s [%s] Gave Item %s (x%s) To SID %s Via Admin Panel",
+                    player:GetData("Name"),
+                    player:GetData("AccountID"),
+                    itemName,
+                    quantity,
+                    targetSID
+                ),
+                {
+                    console = true,
+                    file = false,
+                    database = true,
+                    discord = {
+                        embed = true,
+                        type = "error",
+                        webhook = GetConvar("discord_admin_webhook", ''),
+                    },
+                }
+            )
+
+            cb({ success = true, message = string.format('Gave %sx %s to SID %s', quantity, itemName, targetSID) })
+        else
+            cb(false)
+        end
+    end)
+
     Callbacks:RegisterServerCallback('Admin:ToggleInvisible', function(source, data, cb)
         local player = Fetch:Source(source)
         if player and player.Permissions:IsAdmin() then
