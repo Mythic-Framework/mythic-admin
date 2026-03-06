@@ -1,3 +1,65 @@
+local _adminItemsDB = {}
+local _adminTypeLabels = {
+    [1] = "Consumable", [2] = "Weapon", [3] = "Tool", [4] = "Crafting",
+    [5] = "Collectable", [6] = "Junk", [7] = "Other", [8] = "Evidence",
+    [9] = "Ammo", [10] = "Container", [11] = "Gem", [12] = "Paraphernalia",
+    [13] = "Wearable", [14] = "Contraband", [15] = "Gang Chain",
+    [16] = "Attachment", [17] = "Schematic",
+}
+
+local _adminItemFiles = {
+    'items/containers.lua', 'items/crafting.lua', 'items/dangerous.lua',
+    'items/drugs.lua', 'items/evidence.lua', 'items/fishing.lua',
+    'items/labor.lua', 'items/loot.lua', 'items/medical.lua',
+    'items/misc.lua', 'items/robbery.lua', 'items/tools.lua',
+    'items/unique.lua', 'items/vehicles.lua',
+    'items/food/alcohol.lua', 'items/food/bakery.lua', 'items/food/beanmachine.lua',
+    'items/food/burgershot.lua', 'items/food/food.lua', 'items/food/ingredients.lua',
+    'items/food/noodles.lua', 'items/food/pizza_this.lua', 'items/food/prego.lua',
+    'items/food/prison.lua', 'items/food/sandwich.lua', 'items/food/train.lua',
+    'items/food/uwu.lua',
+    'items/weapons/ammo.lua', 'items/weapons/attachments.lua', 'items/weapons/base.lua',
+    'items/weapons/bobcat.lua',
+    'items/schematics/attachments.lua', 'items/schematics/base.lua', 'items/schematics/weapons.lua',
+}
+
+function LoadAdminItemDatabase()
+    _adminItemsDB = {}
+    local _itemsSource = {}
+    local stubMeta = { __index = function() return {} end }
+    local _schematics = setmetatable({}, stubMeta)
+
+    for _, filePath in ipairs(_adminItemFiles) do
+        local content = LoadResourceFile('mythic-inventory', filePath)
+        if content then
+            local env = {
+                _itemsSource = _itemsSource,
+                _schematics = _schematics,
+                math = math, string = string, table = table,
+                pairs = pairs, ipairs = ipairs,
+                tonumber = tonumber, tostring = tostring,
+                type = type, setmetatable = setmetatable,
+            }
+            local fn, err = load(content, filePath, 't', env)
+            if fn then
+                fn()
+            else
+                print('^1[Admin] Failed to parse item file ' .. filePath .. ': ' .. tostring(err) .. '^7')
+            end
+        end
+    end
+
+    for _, its in pairs(_itemsSource) do
+        for _, v in ipairs(its) do
+            _adminItemsDB[v.name] = v
+        end
+    end
+
+    local count = 0
+    for _ in pairs(_adminItemsDB) do count = count + 1 end
+    print('^2[Admin] Loaded ' .. count .. ' items from mythic-inventory files^7')
+end
+
 function GetSpawnLocations()
     local p = promise.new()
 
@@ -344,84 +406,113 @@ function RegisterCallbacks()
         end
     end)
 
+    LoadAdminItemDatabase()
+
     Callbacks:RegisterServerCallback('Admin:GetItemList', function(source, data, cb)
         local player = Fetch:Source(source)
-        if player and player.Permissions:IsAdmin() then
-            local items = exports['mythic-inventory']:GetItemsDatabase()
-            cb(items)
-        else
-            cb(false)
+        if not player or not player.Permissions:IsAdmin() then
+            return cb(false)
         end
+
+        local items = {}
+        for name, item in pairs(_adminItemsDB) do
+            local typeNum = item.type or 7
+            table.insert(items, {
+                name = item.name or name,
+                label = item.label or name,
+                type = typeNum,
+                typeLabel = _adminTypeLabels[typeNum] or "Other",
+                weight = item.weight or 0,
+                rarity = item.rarity or 0,
+                price = item.price or 0,
+                isStackable = item.isStackable or false,
+                isUsable = item.isUsable or false,
+                description = item.description or "",
+            })
+        end
+
+        table.sort(items, function(a, b) return a.label < b.label end)
+        cb(items)
     end)
 
     Callbacks:RegisterServerCallback('Admin:GiveItem', function(source, data, cb)
         local player = Fetch:Source(source)
-        if player and player.Permissions:IsAdmin() then
-            local Inventory = exports['mythic-base']:FetchComponent('Inventory')
-
-            if not exports['mythic-inventory']:DoesItemExist(data.itemName) then
-                cb({ success = false, message = 'Item Does Not Exist' })
-                return
-            end
-
-            local targetSID
-            if data.toSelf then
-                local char = player:GetData('Character')
-                if char then
-                    targetSID = char:GetData('SID')
-                end
-            else
-                targetSID = tonumber(data.sid)
-            end
-
-            if not targetSID then
-                cb({ success = false, message = 'Invalid Target' })
-                return
-            end
-
-            local target = Fetch:SID(targetSID)
-            if not target then
-                cb({ success = false, message = 'Player Not Online' })
-                return
-            end
-
-            local itemName = data.itemName
-            local quantity = tonumber(data.quantity) or 1
-            local isWeapon = data.isWeapon
-
-            if isWeapon then
-                local ammo = tonumber(data.ammo) or 0
-                Inventory:AddItem(targetSID, itemName, 1, { ammo = ammo, clip = 0 }, 1)
-            else
-                Inventory:AddItem(targetSID, itemName, quantity, {}, 1)
-            end
-
-            Logger:Warn(
-                "Admin",
-                string.format(
-                    "%s [%s] Gave Item %s (x%s) To SID %s Via Admin Panel",
-                    player:GetData("Name"),
-                    player:GetData("AccountID"),
-                    itemName,
-                    quantity,
-                    targetSID
-                ),
-                {
-                    console = true,
-                    file = false,
-                    database = true,
-                    discord = {
-                        embed = true,
-                        type = "error",
-                        webhook = GetConvar("discord_admin_webhook", ''),
-                    },
-                }
-            )
-
-            cb({ success = true, message = string.format('Gave %sx %s to SID %s', quantity, itemName, targetSID) })
-        else
-            cb(false)
+        if not player or not player.Permissions:IsAdmin() then
+            return cb(false)
         end
+
+        local Inventory = exports['mythic-base']:FetchComponent('Inventory')
+        local itemName = data.itemName
+        local isWeapon = data.isWeapon
+
+        if not itemName or itemName == "" then
+            return cb({ success = false, message = 'No item specified' })
+        end
+
+        if _adminItemsDB[itemName] == nil then
+            return cb({ success = false, message = 'Item does not exist' })
+        end
+
+        local targetSID
+        if data.toSelf then
+            local char = player:GetData('Character')
+            if char then
+                targetSID = char:GetData('SID')
+            end
+        else
+            targetSID = tonumber(data.sid)
+        end
+
+        if not targetSID then
+            return cb({ success = false, message = 'Invalid Target' })
+        end
+
+        local target = Fetch:SID(targetSID)
+        if not target then
+            return cb({ success = false, message = 'Player Not Online' })
+        end
+
+        local targetChar = target:GetData('Character')
+        if not targetChar then
+            return cb({ success = false, message = 'Target has no active character' })
+        end
+
+        local charSID = targetChar:GetData('SID')
+        local quantity = tonumber(data.quantity) or 1
+
+        if isWeapon then
+            local ammo = tonumber(data.ammo) or 0
+            Inventory:AddItem(charSID, itemName, 1, { ammo = ammo, clip = 0 }, 1)
+        else
+            Inventory:AddItem(charSID, itemName, quantity, {}, 1)
+        end
+
+        local targetName = targetChar:GetData('First') .. ' ' .. targetChar:GetData('Last')
+
+        Logger:Warn(
+            "Admin",
+            string.format(
+                "%s [%s] Gave Item %s (x%s) To %s (SID %s) Via Admin Panel",
+                player:GetData("Name"),
+                player:GetData("AccountID"),
+                itemName,
+                quantity,
+                targetName,
+                charSID
+            ),
+            {
+                console = true,
+                file = false,
+                database = true,
+                discord = {
+                    embed = true,
+                    type = "error",
+                    webhook = GetConvar("discord_admin_webhook", ''),
+                },
+            }
+        )
+
+        cb({ success = true, message = string.format('Gave %sx %s to %s (SID %s)', quantity, _adminItemsDB[itemName].label or itemName, targetName, charSID) })
     end)
 
     Callbacks:RegisterServerCallback('Admin:ToggleInvisible', function(source, data, cb)
