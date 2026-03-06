@@ -11,6 +11,9 @@ import CurrentVehicle from './View/CurrentVehicle';
 
 import SearchItems from './SearchItems';
 
+import DoorLockTool from './DoorLockTool';
+import ElevatorTool from './ElevatorTool';
+
 export {
     Dashboard,
     Players,
@@ -18,5 +21,7 @@ export {
     CurrentVehicle,
     PlayerView,
     SearchItems,
+    DoorLockTool,
+    ElevatorTool,
     Error,
 };

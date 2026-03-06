@@ -76,6 +76,20 @@ const admin = [
 		label: 'Items Database',
 		path: '/items-database',
 		exact: true,
+	},
+	{
+		name: 'door-lock-tool',
+		icon: ['fas', 'door-open'],
+		label: 'Door Lock Tool',
+		path: '/door-lock-tool',
+		exact: true,
+	},
+	{
+		name: 'elevator-tool',
+		icon: ['fas', 'elevator'],
+		label: 'Elevator Tool',
+		path: '/elevator-tool',
+		exact: true,
 	}
 ];
 
@@ -113,6 +127,20 @@ const developer = [
 		icon: ['fas', 'box-open'],
 		label: 'Items Database',
 		path: '/items-database',
+		exact: true,
+	},
+	{
+		name: 'door-lock-tool',
+		icon: ['fas', 'door-open'],
+		label: 'Door Lock Tool',
+		path: '/door-lock-tool',
+		exact: true,
+	},
+	{
+		name: 'elevator-tool',
+		icon: ['fas', 'elevator'],
+		label: 'Elevator Tool',
+		path: '/elevator-tool',
 		exact: true,
 	}
 ];
