@@ -347,7 +347,8 @@ function RegisterCallbacks()
     Callbacks:RegisterServerCallback('Admin:GetItemList', function(source, data, cb)
         local player = Fetch:Source(source)
         if player and player.Permissions:IsAdmin() then
-            local items = exports['mythic-inventory']:GetItemsDatabase()
+            local Inventory = exports['mythic-base']:FetchComponent('Inventory')
+            local items = Inventory:GetItemsDatabase()
             cb(items)
         else
             cb(false)
@@ -359,7 +360,7 @@ function RegisterCallbacks()
         if player and player.Permissions:IsAdmin() then
             local Inventory = exports['mythic-base']:FetchComponent('Inventory')
 
-            if not exports['mythic-inventory']:DoesItemExist(data.itemName) then
+            if not Inventory:DoesItemExist(data.itemName) then
                 cb({ success = false, message = 'Item Does Not Exist' })
                 return
             end
