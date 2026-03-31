@@ -1031,7 +1031,7 @@ export default () => {
 			)}
 
 			{/* Edit Dialog */}
-			<Dialog open={editOpen} onClose={closeEdit} maxWidth="md" fullWidth className={classes.dialog}>
+			<Dialog open={editOpen} onClose={closeEdit} maxWidth="md" fullWidth className={classes.dialog} disableEnforceFocus>
 				<div className={classes.dialogTitleBar}>
 					<div>
 						<div className={classes.dialogTitle}>Edit Ped &mdash; {selectedPed?.id || 'Ped'}</div>
@@ -1101,7 +1101,7 @@ export default () => {
 			</Dialog>
 
 			{/* Create Dialog */}
-			<Dialog open={createOpen} onClose={closeCreate} maxWidth="md" fullWidth className={classes.dialog}>
+			<Dialog open={createOpen} onClose={closeCreate} maxWidth="md" fullWidth className={classes.dialog} disableEnforceFocus>
 				<div className={classes.dialogTitleBar}>
 					<div>
 						<div className={classes.dialogTitle}>Create Temp Ped</div>

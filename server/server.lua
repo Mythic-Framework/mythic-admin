@@ -15,6 +15,7 @@ function RetrieveComponents()
 	Tasks = exports["mythic-base"]:FetchComponent("Tasks")
 	Pwnzor = exports["mythic-base"]:FetchComponent("Pwnzor")
 	WebAPI = exports["mythic-base"]:FetchComponent("WebAPI")
+	Version = exports["mythic-base"]:FetchComponent("Version")
 end
 
 AddEventHandler("Core:Shared:Ready", function()
@@ -34,6 +35,7 @@ AddEventHandler("Core:Shared:Ready", function()
 		"Tasks",
 		"Pwnzor",
 		"WebAPI",
+		"Version",
 	}, function(error)
 		if #error > 0 then
 			return
@@ -42,6 +44,8 @@ AddEventHandler("Core:Shared:Ready", function()
 		RegisterCallbacks()
 		RegisterChatCommands()
 		StartDashboardThread()
+
+		Version:Check('Mythic-Framework/Mythic-VersionCheckers', GetCurrentResourceName())  -- Version Checker
 
 		Middleware:Add('Characters:Spawning', function(source)
 			local player = Fetch:Source(source)

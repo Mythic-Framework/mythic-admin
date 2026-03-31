@@ -16,16 +16,10 @@ export default {
 	},
 	copyClipboard(text = '') {
 		const node = document.createElement('textarea');
-		const selection = document.getSelection();
-
 		node.textContent = text;
 		document.body.appendChild(node);
-
-		selection.removeAllRanges();
 		node.select();
 		document.execCommand('copy');
-
-		selection.removeAllRanges();
 		document.body.removeChild(node);
 	},
 	emulate(type, data = null) {

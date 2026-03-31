@@ -1,10 +1,12 @@
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
+
+version '1.0.3'
+repository 'https://github.com/Mythic-Framework/mythic-admin'
+
 client_script "@mythic-base/components/cl_error.lua"
 client_script "@mythic-pwnzor/client/check.lua"
-
-version '1.0.2'
 client_scripts {
     'client/client.lua',
     'client/attach.lua',
