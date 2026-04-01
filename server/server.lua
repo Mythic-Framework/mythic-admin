@@ -45,7 +45,7 @@ AddEventHandler("Core:Shared:Ready", function()
 		RegisterChatCommands()
 		StartDashboardThread()
 
-		Version:Check('Mythic-Framework/Mythic-VersionCheckers', GetCurrentResourceName())  -- Version Checker
+		Version:Check('Mythic-Framework/Mythic-VersionCheckers', GetCurrentResourceName())
 
 		Middleware:Add('Characters:Spawning', function(source)
 			local player = Fetch:Source(source)
