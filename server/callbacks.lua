@@ -344,7 +344,7 @@ function RegisterCallbacks()
         end
     end)
 
-    Callbacks:RegisterServerCallback('Admin:GetItemList', function(source, data, cb)
+Callbacks:RegisterServerCallback('Admin:GetItemList', function(source, data, cb)
         local player = Fetch:Source(source)
         if player and player.Permissions:IsAdmin() then
             local Inventory = exports['mythic-base']:FetchComponent('Inventory')
