@@ -173,7 +173,7 @@ export default ({ open, item, onClose, targetSid = '', targetName = '' }) => {
 
 	if (!item) return null;
 
-	const isWeapon = item.type === 2;
+	const isWeapon = item.type === 2 && !item.isThrowable;
 	const imgSrc = `nui://mythic-inventory/ui/images/items/${item.name}.webp`;
 	const typeLabel = ITEM_TYPES[item.type] || 'Unknown';
 	const rarityLabel = RARITY_LABELS[item.rarity] || 'Common';

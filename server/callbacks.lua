@@ -398,7 +398,7 @@ Callbacks:RegisterServerCallback('Admin:GetItemList', function(source, data, cb)
             local isWeapon = data.isWeapon
             local targetName = targetChar:GetData('First') .. ' ' .. targetChar:GetData('Last')
 
-            if isWeapon then
+            if isWeapon and not Inventory:IsThrowable(itemName) then
                 local ammo = tonumber(data.ammo) or 0
                 Inventory:AddItem(charSID, itemName, 1, { ammo = ammo, clip = 0 }, 1)
             else
